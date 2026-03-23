@@ -1,7 +1,22 @@
 const db = require("../db");
 
 exports.getAllProducts = (req, res) => {
-  db.query("SELECT * FROM products", (err, result) => {
+  let sql = "SELECT * FROM products WHERE 1=1";
+  let params = [];
+
+  const { category, search } = req.query;
+
+  if (category) {
+    sql += " AND category = ?";
+    params.push(category);
+  }
+
+  if (search) {
+    sql += " AND name LIKE ?";
+    params.push(`%${search}%`);
+  }
+
+  db.query(sql, params, (err, result) => {
     if (err) return res.status(500).json(err);
     res.json(result);
   });
