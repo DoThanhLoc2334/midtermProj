@@ -7,14 +7,14 @@ exports.getAllProducts = (req, res) => {
   const { category, search } = req.query;
 
   if (category) {
-    sql += " AND category = ?";
+    sql += " AND LOWER(category) = LOWER(?)";
     params.push(category);
   }
 
   if (search) {
-    sql += " AND name LIKE ?";
-    params.push(`%${search}%`);
-  }
+  sql += " AND LOWER(name) LIKE LOWER(?)";
+  params.push(`%${search}%`);
+}
 
   db.query(sql, params, (err, result) => {
     if (err) return res.status(500).json(err);
