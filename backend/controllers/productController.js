@@ -1,6 +1,5 @@
 const db = require("../db");
 
-// GET ALL
 exports.getAllProducts = (req, res) => {
   db.query("SELECT * FROM products", (err, result) => {
     if (err) return res.status(500).json(err);
@@ -8,7 +7,6 @@ exports.getAllProducts = (req, res) => {
   });
 };
 
-// GET BY ID
 exports.getProductById = (req, res) => {
   db.query(
     "SELECT * FROM products WHERE id = ?",
@@ -25,12 +23,19 @@ exports.getProductById = (req, res) => {
   );
 };
 
-// CREATE
 exports.createProduct = (req, res) => {
   const { name, category, price, image, stock } = req.body;
 
-  if (!name || !category || !price || !image || stock == null) {
+  if (!name || !category || price == null || !image || stock == null) {
     return res.status(400).json({ message: "Missing fields" });
+  }
+
+  if (isNaN(price) || isNaN(stock)) {
+    return res.status(400).json({ message: "Price and stock must be numbers" });
+  }
+
+  if (price <= 0 || stock < 0) {
+    return res.status(400).json({ message: "Invalid values" });
   }
 
   const sql =
@@ -43,9 +48,16 @@ exports.createProduct = (req, res) => {
   });
 };
 
-// UPDATE
 exports.updateProduct = (req, res) => {
   const { name, category, price, image, stock } = req.body;
+
+  if (!name || !category || price == null || !image || stock == null) {
+    return res.status(400).json({ message: "Missing fields" });
+  }
+
+  if (isNaN(price) || isNaN(stock)) {
+    return res.status(400).json({ message: "Invalid data type" });
+  }
 
   const sql =
     "UPDATE products SET name=?, category=?, price=?, image=?, stock=? WHERE id=?";
@@ -65,7 +77,6 @@ exports.updateProduct = (req, res) => {
   );
 };
 
-// DELETE
 exports.deleteProduct = (req, res) => {
   db.query(
     "DELETE FROM products WHERE id=?",
