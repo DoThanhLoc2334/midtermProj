@@ -7,12 +7,14 @@ import EditProduct from "./pages/EditProduct";
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/product/:id" element={<Detail />} />
-        <Route path="/add" element={<AddProduct />} />
-        <Route path="/edit/:id" element={<EditProduct />} />
-      </Routes>
+      <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column" }}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/product/:id" element={<Detail />} />
+          <Route path="/add" element={<AddProduct />} />
+          <Route path="/edit/:id" element={<EditProduct />} />
+        </Routes>
+      </div>
     </BrowserRouter>
   );
 }
